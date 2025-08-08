@@ -3,6 +3,7 @@ package br.com.wallet.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import br.com.wallet.dto.UserWithWalletDTO;
 import br.com.wallet.model.User;
 import br.com.wallet.model.Wallet;
 import br.com.wallet.service.UserService;
@@ -34,12 +35,13 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<User>> getAllUsers() {
-        return ResponseEntity.ok(userService.findAll());
+    public ResponseEntity<List<UserWithWalletDTO>> getAllUsers() {
+        List<UserWithWalletDTO> users = this.userService.findAll();
+        return ResponseEntity.ok(users);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
+    public ResponseEntity<UserWithWalletDTO> getUserById(@PathVariable Long id) {
         return userService.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());

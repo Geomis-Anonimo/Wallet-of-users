@@ -1,5 +1,6 @@
 package br.com.wallet.service;
 
+import br.com.wallet.dto.UserWithWalletDTO;
 import br.com.wallet.model.User;
 import br.com.wallet.model.Wallet;
 import br.com.wallet.repository.UserRepository;
@@ -11,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -45,13 +47,17 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public List<User> findAll() {
-        return userRepo.findAll();
+    public List<UserWithWalletDTO> findAll() {
+        List<User> users = userRepo.findAllWithWallet();
+        return users.stream()
+                .map(user -> new UserWithWalletDTO(user.getId(), user.getName(), user.getEmail(), user.getWallet().getBalance()))
+                .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
-    public Optional<User> findById(Long id) {
-        return userRepo.findById(id);
+    public Optional<UserWithWalletDTO> findById(Long id) {
+        Optional<User> user = userRepo.findByIdWithWallet(id);
+        return user.map(u -> new UserWithWalletDTO(u.getId(), u.getName(), u.getEmail(), u.getWallet().getBalance()));
     }
 
     @Transactional
