@@ -1,11 +1,13 @@
 package br.com.wallet.service;
 
 import br.com.wallet.dto.UserWithWalletDTO;
+import br.com.wallet.infra.exceptions.CustomException;
 import br.com.wallet.model.User;
 import br.com.wallet.model.Wallet;
 import br.com.wallet.repository.UserRepository;
 import br.com.wallet.repository.WalletRepository;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,7 +30,7 @@ public class UserService {
     @Transactional
     public User createUser(User user) {
         if (userRepo.existsByEmail(user.getEmail())) {
-            throw new RuntimeException("Email já cadastrado.");
+            throw new CustomException(HttpStatus.BAD_REQUEST.value(), "Email já cadastrado");
         }
 
         User saved = userRepo.save(user);
@@ -63,12 +65,12 @@ public class UserService {
     @Transactional
     public User update(Long id, User newData) {
         User user = userRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
+                .orElseThrow(() -> new CustomException(HttpStatus.BAD_REQUEST.value(), "Usuário não encontrado"));
 
         if (newData.getEmail() != null) {
             String newEmail = newData.getEmail();
             if (!newEmail.equalsIgnoreCase(user.getEmail()) && userRepo.existsByEmail(newEmail)) {
-                throw new RuntimeException("Email já cadastrado.");
+                throw new CustomException(HttpStatus.BAD_REQUEST.value(), "Email já cadastrado");
             }
             user.setEmail(newEmail);
         }
@@ -87,7 +89,7 @@ public class UserService {
     @Transactional
     public void delete(Long id) {
         if (!userRepo.existsById(id)) {
-            throw new RuntimeException("Usuário não encontrado.");
+            throw new CustomException(HttpStatus.BAD_REQUEST.value(), "Usuário não encontrado");
         }
         userRepo.deleteById(id);
     }
