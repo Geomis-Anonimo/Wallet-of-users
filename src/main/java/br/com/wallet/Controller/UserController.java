@@ -1,11 +1,13 @@
-package br.com.wallet.Controller;
+package br.com.wallet.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import br.com.wallet.Model.User;
-import br.com.wallet.Service.UserService;
+import br.com.wallet.model.User;
+import br.com.wallet.model.Wallet;
+import br.com.wallet.service.UserService;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -20,7 +22,14 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<User> createUser(@RequestBody User user) {
-        User saved = userService.createUser(user); // cria o user e a wallet vinculada
+        if (user.getWallet() == null) {
+            Wallet wallet = new Wallet();
+            wallet.setBalance(BigDecimal.ZERO);
+            wallet.setUser(user);
+            user.setWallet(wallet);
+        }
+        
+        User saved = userService.createUser(user);
         return ResponseEntity.status(201).body(saved);
     }
 

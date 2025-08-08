@@ -1,8 +1,8 @@
-package br.com.wallet.Repository;
+package br.com.wallet.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import br.com.wallet.Model.User;
+import br.com.wallet.model.User;
 
 
 public interface UserRepository extends JpaRepository<User, Long> {

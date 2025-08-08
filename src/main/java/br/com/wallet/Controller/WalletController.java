@@ -1,13 +1,13 @@
-package br.com.wallet.Controller;
+package br.com.wallet.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import br.com.wallet.DTOs.DepositRequest;
-import br.com.wallet.DTOs.TransferRequest;
-import br.com.wallet.Model.Wallet;
-import br.com.wallet.Repository.WalletRepository;
-import br.com.wallet.Service.WalletService;
+import br.com.wallet.dto.DepositRequest;
+import br.com.wallet.dto.TransferRequest;
+import br.com.wallet.model.Wallet;
+import br.com.wallet.repository.WalletRepository;
+import br.com.wallet.service.WalletService;
 
 import java.math.BigDecimal;
 

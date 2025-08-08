@@ -1,4 +1,4 @@
-package br.com.wallet.DTOs;
+package br.com.wallet.dto;
 
 import lombok.Data;
 

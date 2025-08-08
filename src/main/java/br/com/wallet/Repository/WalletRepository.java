@@ -1,9 +1,9 @@
-package br.com.wallet.Repository;
+package br.com.wallet.repository;
 
-import br.com.wallet.Model.Wallet;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
 
+import br.com.wallet.model.Wallet;
 import jakarta.persistence.LockModeType;
 import java.util.Optional;
 

@@ -1,7 +1,8 @@
-package br.com.wallet.Service;
+package br.com.wallet.service;
 
-import br.com.wallet.Model.Wallet;
-import br.com.wallet.Repository.WalletRepository;
+import br.com.wallet.model.Wallet;
+import br.com.wallet.repository.WalletRepository;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

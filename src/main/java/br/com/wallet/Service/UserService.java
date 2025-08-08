@@ -1,12 +1,14 @@
-package br.com.wallet.Service;
+package br.com.wallet.service;
 
-import br.com.wallet.Model.User;
-import br.com.wallet.Model.Wallet;
-import br.com.wallet.Repository.UserRepository;
-import br.com.wallet.Repository.WalletRepository;
+import br.com.wallet.model.User;
+import br.com.wallet.model.Wallet;
+import br.com.wallet.repository.UserRepository;
+import br.com.wallet.repository.WalletRepository;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,14 +28,19 @@ public class UserService {
         if (userRepo.existsByEmail(user.getEmail())) {
             throw new RuntimeException("Email já cadastrado.");
         }
+
         User saved = userRepo.save(user);
 
-        Wallet wallet = Wallet.builder()
-                .user(saved)
-                .build();
-        walletRepo.save(wallet);
+        if (saved.getWallet() == null) {
+            Wallet wallet = Wallet.builder()
+                    .user(saved)
+                    .balance(BigDecimal.ZERO)
+                    .build();
 
-        saved.setWallet(wallet);
+            walletRepo.save(wallet);
+            saved.setWallet(wallet);
+        }
+
         return saved;
     }
 
@@ -73,10 +80,6 @@ public class UserService {
 
     @Transactional
     public void delete(Long id) {
-        // Remoção em cascata deve estar configurada no relacionamento (User -> Wallet) se quiser remover a wallet junto.
-        // Se não estiver, remova explicitamente a wallet antes:
-        // walletRepo.findByUserId(id).ifPresent(w -> walletRepo.deleteById(w.getId()));
-
         if (!userRepo.existsById(id)) {
             throw new RuntimeException("Usuário não encontrado.");
         }

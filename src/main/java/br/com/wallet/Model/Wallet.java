@@ -1,5 +1,6 @@
-package br.com.wallet.Model;
+package br.com.wallet.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -14,13 +15,8 @@ public class Wallet {
     private Long id;
 
     @OneToOne
-    @JoinColumn(
-        name = "user_id",
-        nullable = false,
-        unique = true,
-        foreignKey = @ForeignKey(name = "fk_wallet_user")
-    )
-    @org.hibernate.annotations.OnDelete(action = org.hibernate.annotations.OnDeleteAction.CASCADE)
+    @JoinColumn(name = "user_id", nullable = false, unique = true, foreignKey = @ForeignKey(name = "fk_wallet_user"))
+    @JsonIgnore
     private User user;
 
     @Column(precision = 15, scale = 2, nullable = false)
