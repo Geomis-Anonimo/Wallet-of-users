@@ -59,6 +59,9 @@ public class UserService {
     @Transactional(readOnly = true)
     public Optional<UserWithWalletDTO> findById(Long id) {
         Optional<User> user = userRepo.findByIdWithWallet(id);
+        if (user.isEmpty()) {
+            throw new CustomException(HttpStatus.NOT_FOUND.value(), "Nenhum usuário encontrado com o ID informado.");
+        }
         return user.map(u -> new UserWithWalletDTO(u.getId(), u.getName(), u.getEmail(), u.getWallet().getBalance()));
     }
 

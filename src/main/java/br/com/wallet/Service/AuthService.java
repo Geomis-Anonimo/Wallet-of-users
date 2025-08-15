@@ -21,7 +21,7 @@ public class AuthService {
 
         if (!password.equals(user.getPassword())) {
             throw new CustomException(401, "E-mail ou senha incorretos");
-        }        
+        }
 
         return user;
     }
